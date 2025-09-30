@@ -3,35 +3,31 @@ import { Clock, Users, AlertCircle, Mail, User, Coffee, LogOut, LogIn } from 'lu
 
 // Mock database - In real implementation, this would be PostgreSQL
 const mockEmployees = [
-  { id: 1, name: 'Bongani Mkhize', email: 'bmkhize@company.com', department: 'Engineering' },
+  { id: 1, name: 'John Doe', email: 'john@company.com', department: 'Engineering' },
   { id: 2, name: 'Jane Smith', email: 'jane@company.com', department: 'Marketing' },
   { id: 3, name: 'Mike Johnson', email: 'mike@company.com', department: 'Sales' },
   { id: 4, name: 'Sarah Wilson', email: 'sarah@company.com', department: 'HR' },
   { id: 5, name: 'David Brown', email: 'david@company.com', department: 'Finance' }
 ];
 
-const TimeTrackingSystem = () => {
-  const [currentUser, setCurrentUser] = useState('employee'); // 'employee' or 'admin'
+function TimeTrackingSystem() {
+  const [currentUser, setCurrentUser] = useState('employee');
   const [timeRecords, setTimeRecords] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Update current time every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Check for late employees at 9 AM
   useEffect(() => {
     const checkLateEmployees = () => {
       const now = new Date();
       const hour = now.getHours();
-      const minute = now.getMinutes();
       
-      // Check if it's past 9 AM
       if (hour >= 9) {
         const today = now.toDateString();
         const clockedInToday = timeRecords
@@ -55,7 +51,6 @@ const TimeTrackingSystem = () => {
           };
           
           setNotifications(prev => {
-            // Avoid duplicate notifications for the same day
             const existingNotification = prev.find(n => 
               n.type === 'late_employees' && 
               n.timestamp.toDateString() === today
@@ -70,8 +65,8 @@ const TimeTrackingSystem = () => {
       }
     };
     
-    const interval = setInterval(checkLateEmployees, 60000); // Check every minute
-    checkLateEmployees(); // Check immediately
+    const interval = setInterval(checkLateEmployees, 60000);
+    checkLateEmployees();
     
     return () => clearInterval(interval);
   }, [timeRecords]);
@@ -105,7 +100,6 @@ const TimeTrackingSystem = () => {
 
     setTimeRecords(prev => [newRecord, ...prev]);
     
-    // Show success message
     const actionMessages = {
       'clock_in': 'Clocked in successfully!',
       'break_start': 'Break started!',
@@ -158,7 +152,6 @@ const TimeTrackingSystem = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
         <div className="max-w-md mx-auto">
-          {/* Header */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl font-bold text-gray-800 flex items-center">
@@ -183,7 +176,6 @@ const TimeTrackingSystem = () => {
             </div>
           </div>
 
-          {/* Employee Selection */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h2 className="text-lg font-semibold mb-4">Employee Login</h2>
             
@@ -220,7 +212,6 @@ const TimeTrackingSystem = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="grid grid-cols-2 gap-4">
               <button
@@ -261,11 +252,9 @@ const TimeTrackingSystem = () => {
     );
   }
 
-  // Admin View
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-gray-800 flex items-center">
@@ -281,7 +270,6 @@ const TimeTrackingSystem = () => {
           </div>
         </div>
 
-        {/* Notifications */}
         {notifications.length > 0 && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
             <h2 className="text-lg font-semibold text-red-800 flex items-center mb-3">
@@ -306,7 +294,6 @@ const TimeTrackingSystem = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Employee Status */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Current Employee Status</h2>
             <div className="space-y-3">
@@ -334,7 +321,6 @@ const TimeTrackingSystem = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Today's Activity</h2>
             <div className="max-h-96 overflow-y-auto space-y-2">
@@ -364,7 +350,6 @@ const TimeTrackingSystem = () => {
           </div>
         </div>
 
-        {/* Hours Summary */}
         <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
           <h2 className="text-xl font-semibold mb-4">Hours Summary (Today)</h2>
           <div className="overflow-x-auto">
@@ -415,6 +400,6 @@ const TimeTrackingSystem = () => {
       </div>
     </div>
   );
-};
+}
 
 export default TimeTrackingSystem;
